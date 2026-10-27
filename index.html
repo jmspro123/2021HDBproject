@@ -3,99 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Singapore HDB Resale Price Forecasting</title>
+    <title>Singapore HDB Resale Price Forecasting | Data Science Portfolio</title>
     <meta
       name="description"
-      content="Recruiter-ready portfolio dashboard for a Singapore HDB resale price forecasting project using R and machine learning."
+      content="Data science portfolio project forecasting Singapore HDB resale prices using statistical modeling, machine learning, and business-focused analysis."
     />
     <style>
       :root {
-        --bg: #f4f7fb;
+        --bg: #f5f7fb;
         --panel: #ffffff;
-        --primary: #113c6d;
-        --primary-2: #1a5c9a;
-        --accent: #4ecdc4;
-        --accent-2: #ffd166;
-        --text: #112233;
-        --muted: #5e6d7d;
-        --line: #dfeaf3;
+        --panel-soft: #f3f7ff;
+        --primary: #0d1b3d;
+        --primary-2: #1f4f8f;
+        --secondary: #2aa7a0;
+        --secondary-2: #ffcb5b;
+        --text: #172033;
+        --muted: #58657a;
+        --line: #dfe7f3;
         --success: #1d9a6c;
         --warning: #d17c27;
-        --shadow: 0 12px 30px rgba(17, 44, 82, 0.08);
+        --shadow: 0 18px 40px rgba(12, 28, 60, 0.10);
       }
 
       * { box-sizing: border-box; }
-
       html { scroll-behavior: smooth; }
 
       body {
         margin: 0;
         font-family: Inter, "Segoe UI", Arial, sans-serif;
-        background: linear-gradient(180deg, #edf4fb 0%, #f9fbfe 100%);
+        background:
+          radial-gradient(circle at top left, rgba(32, 97, 181, 0.09), transparent 20%),
+          linear-gradient(180deg, #f7f9fd 0%, #f1f6fb 100%);
         color: var(--text);
       }
 
+      a { color: inherit; text-decoration: none; }
+
       .container {
-        max-width: 1200px;
+        max-width: 1180px;
         margin: 0 auto;
-        padding: 32px 24px 80px;
+        padding: 28px 24px 72px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 0 20px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        color: var(--primary);
+      }
+
+      .brand-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        display: grid;
+        place-items: center;
+        color: white;
+        font-size: 0.82rem;
+        box-shadow: var(--shadow);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 700;
+        transition: 0.2s ease;
+        border: 1px solid transparent;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        box-shadow: var(--shadow);
+      }
+
+      .btn-secondary {
+        background: white;
+        border-color: var(--line);
+        color: var(--primary);
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
       }
 
       .hero {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+        background: linear-gradient(135deg, #0c1833 0%, #173f74 45%, #1d5ea8 100%);
         color: white;
-        border-radius: 24px;
-        padding: 32px 28px;
+        border-radius: 28px;
+        padding: clamp(28px, 4vw, 52px);
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
       }
 
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: -100px;
+        top: -100px;
+        width: 340px;
+        height: 340px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.07);
+      }
+
       .hero::after {
         content: "";
         position: absolute;
-        right: -80px;
-        top: -80px;
-        width: 280px;
-        height: 280px;
-        background: rgba(255,255,255,0.08);
+        left: 45%;
+        bottom: -90px;
+        width: 260px;
+        height: 260px;
         border-radius: 50%;
+        background: rgba(118, 198, 255, 0.08);
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
       }
 
       .eyebrow {
         display: inline-flex;
-        padding: 6px 12px;
-        border-radius: 999px;
+        align-items: center;
+        gap: 8px;
         background: rgba(255,255,255,0.12);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-size: 11px;
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 0.75rem;
         font-weight: 700;
-        margin-bottom: 16px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 28px;
+        align-items: center;
       }
 
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        line-height: 1.1;
+        margin: 0 0 16px;
+        font-size: clamp(2.2rem, 4vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: -0.06em;
       }
 
       .subtitle {
         margin: 0;
-        max-width: 780px;
-        color: rgba(255,255,255,0.9);
+        max-width: 720px;
+        color: rgba(255,255,255,0.82);
+        line-height: 1.75;
         font-size: 1.08rem;
-        line-height: 1.7;
       }
 
-      .kpis {
+      .hero-actions {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .mini-card {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        padding: 24px 20px;
+        backdrop-filter: blur(8px);
+      }
+
+      .mini-label {
+        color: rgba(255,255,255,0.72);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
+      }
+
+      .mini-stat {
+        font-size: clamp(1.8rem, 2vw, 2.5rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .mini-text {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.5;
+        margin-top: 10px;
+      }
+
+      .stats {
         display: grid;
-        grid-template-columns: repeat(4, minmax(180px, 1fr));
+        grid-template-columns: repeat(4, minmax(170px, 1fr));
         gap: 18px;
         margin: 28px 0;
       }
 
-      .card {
+      .stat-card {
         background: var(--panel);
         border: 1px solid var(--line);
         border-radius: 18px;
@@ -103,39 +231,38 @@
         padding: 20px 18px;
       }
 
-      .metric {
-        font-size: 2rem;
-        font-weight: 800;
-        letter-spacing: -0.04em;
-        color: var(--primary);
+      .stat-value {
+        font-size: clamp(1.8rem, 2vw, 2.25rem);
         margin: 0 0 8px;
+        color: var(--primary);
+        font-weight: 800;
+        letter-spacing: -0.05em;
       }
 
-      .metric-label {
+      .stat-label {
         color: var(--muted);
-        font-size: 0.9rem;
-        margin: 0;
         line-height: 1.5;
+        margin: 0;
       }
 
-      .grid {
+      .content-grid {
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-columns: 1.15fr 0.85fr;
         gap: 24px;
-        margin-top: 26px;
+        margin-top: 28px;
       }
 
       .panel {
         background: var(--panel);
         border: 1px solid var(--line);
-        border-radius: 20px;
+        border-radius: 22px;
         box-shadow: var(--shadow);
-        padding: 22px 20px;
+        padding: 24px 22px;
       }
 
       .panel h2 {
-        margin: 0 0 16px;
-        font-size: 1.2rem;
+        margin: 0 0 14px;
+        font-size: 1.25rem;
         color: var(--primary);
       }
 
@@ -149,18 +276,51 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-top: 18px;
+        margin-top: 16px;
       }
 
       .pill {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 8px 12px;
         border-radius: 999px;
-        background: #eef6ff;
-        border: 1px solid #dfeeff;
+        border: 1px solid #dfeaff;
+        background: #eef5ff;
         color: var(--primary);
-        font-size: 0.85rem;
-        font-weight: 600;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .bullet-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 12px;
+      }
+
+      .bullet-list li {
+        display: flex;
+        gap: 12px;
+        padding: 12px 12px;
+        border-radius: 14px;
+        background: #f8fbff;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .bullet-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--secondary), var(--secondary-2));
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: var(--primary);
+        flex: 0 0 24px;
       }
 
       .method-grid {
@@ -173,27 +333,25 @@
       .method-box {
         border: 1px solid var(--line);
         background: #f8fbff;
-        border-radius: 14px;
-        padding: 14px 14px;
+        border-radius: 16px;
+        padding: 16px 14px;
       }
 
       .method-box strong {
         display: block;
-        margin-bottom: 8px;
         color: var(--primary);
+        margin-bottom: 8px;
       }
 
       .method-box span {
         color: var(--muted);
         line-height: 1.6;
-        font-size: 0.92rem;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 14px;
-        font-size: 0.94rem;
+        margin-top: 8px;
       }
 
       th, td {
@@ -204,155 +362,180 @@
 
       th {
         color: var(--primary);
-        font-weight: 700;
         background: #f8fbff;
+        font-weight: 800;
       }
 
       td {
         color: var(--text);
       }
 
-      .insights {
-        list-style: none;
-        padding: 0;
-        margin: 16px 0 0;
-        display: grid;
-        gap: 12px;
-      }
-
-      .insights li {
+      .tech-stack {
         display: flex;
-        gap: 12px;
-        padding: 12px 12px;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .tech-item {
+        padding: 9px 12px;
+        background: #f3f7ff;
         border: 1px solid var(--line);
-        border-radius: 12px;
-        background: #fbfdff;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-
-      .bullet {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        border-radius: 999px;
         color: var(--primary);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        flex: 0 0 22px;
-        margin-top: 2px;
+        font-size: 0.82rem;
+        font-weight: 700;
       }
 
-      .footer-note {
+      .cta-band {
         margin-top: 28px;
-        padding: 18px 20px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #eef7ff 0%, #f7fafc 100%);
+        border-radius: 22px;
+        background: linear-gradient(135deg, #eef6ff, #f9fbff);
         border: 1px solid var(--line);
+        padding: 24px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .cta-band h3 {
+        margin: 0 0 4px;
         color: var(--primary);
-        font-weight: 600;
+        font-size: 1.2rem;
       }
 
-      @media (max-width: 900px) {
-        .kpis { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
-        .grid { grid-template-columns: 1fr; }
+      .cta-band p {
+        margin: 0;
+        color: var(--muted);
       }
 
-      @media (max-width: 560px) {
-        .kpis { grid-template-columns: 1fr; }
-        .method-grid { grid-template-columns: 1fr; }
-        .container { padding: 20px 14px 60px; }
+      @media (max-width: 980px) {
+        .hero-grid, .content-grid { grid-template-columns: 1fr; }
+        .stats { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+      }
+
+      @media (max-width: 600px) {
+        .container { padding: 20px 16px 60px; }
+        .topbar { flex-direction: column; align-items: flex-start; }
+        .stats, .method-grid { grid-template-columns: 1fr; }
+        .nav-actions { width: 100%; }
+        .nav-actions .btn { flex: 1; }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <header class="hero">
-        <div class="eyebrow">Data Science Portfolio Project</div>
-        <h1>Singapore HDB Resale Price Forecasting</h1>
-        <p class="subtitle">
-          A predictive analytics project focused on understanding and forecasting resale prices of Singapore public housing units using statistical learning, feature analysis, and model comparison.
-        </p>
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">DS</div>
+          <span>Data Science Portfolio</span>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn btn-secondary" href="https://github.com/jmspro123/2021HDBproject" target="_blank" rel="noreferrer">GitHub Repo</a>
+          <a class="btn btn-primary" href="https://github.com/jmspro123/2021HDBproject" target="_blank" rel="noreferrer">View Project</a>
+        </div>
       </header>
 
-      <section class="kpis">
-        <div class="card">
-          <p class="metric">6,000</p>
-          <p class="metric-label">HDB transactions analyzed in the sample dataset</p>
-        </div>
-        <div class="card">
-          <p class="metric">0.9266</p>
-          <p class="metric-label">Adjusted R² from the full linear regression model</p>
-        </div>
-        <div class="card">
-          <p class="metric">0.94</p>
-          <p class="metric-label">AUC for the logistic regression classification model</p>
-        </div>
-        <div class="card">
-          <p class="metric">7+</p>
-          <p class="metric-label">Modeling approaches used, from clustering to decision trees</p>
+      <section class="hero">
+        <div class="hero-inner hero-grid">
+          <div>
+            <div class="eyebrow">Data Science • Forecasting • Analytics</div>
+            <h1>Forecasting Singapore HDB Resale Prices</h1>
+            <p class="subtitle">
+              A data science project designed to answer a high-value business question: what factors drive HDB resale prices, and how accurately can they be predicted? This work combines exploratory analysis, feature understanding, statistical modeling, and machine learning to turn housing data into actionable insight.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="https://github.com/jmspro123/2021HDBproject" target="_blank" rel="noreferrer">Explore Project</a>
+              <a class="btn btn-secondary" href="#results" style="background:rgba(255,255,255,0.08); color:white; border-color:rgba(255,255,255,0.14);">See Results</a>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="mini-label">Portfolio Snapshot</div>
+            <div class="mini-stat">0.9266</div>
+            <div class="mini-text">Adjusted R² from the full linear regression model, indicating strong explanatory power for resale price variation.</div>
+          </div>
         </div>
       </section>
 
-      <section class="grid">
+      <section class="stats" aria-label="Project metrics">
+        <div class="stat-card">
+          <p class="stat-value">6,000</p>
+          <p class="stat-label">HDB transactions evaluated in the analyzed dataset</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-value">0.94</p>
+          <p class="stat-label">AUC score for the logistic regression classification model</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-value">7+</p>
+          <p class="stat-label">Modeling techniques explored, from clustering to decision trees</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-value">R</p>
+          <p class="stat-label">Primary technical stack used for analysis and modeling</p>
+        </div>
+      </section>
+
+      <section class="content-grid">
         <div class="panel">
           <h2>Project Objective</h2>
           <p>
-            The goal of this project was to predict HDB resale prices and identify the key drivers behind price variation in Singapore’s housing market. The analysis combines exploratory data analysis, feature engineering, and model comparison to evaluate how different variables influence resale pricing.
+            This project addresses a common real-estate problem: understanding which variables most strongly influence pricing and how accurate predictions can be when using structured property data. By modeling Singapore HDB resale prices, the analysis demonstrates the kind of business-facing analytics work expected in modern data science roles.
           </p>
           <div class="pill-row">
-            <span class="pill">R Programming</span>
+            <span class="pill">Feature Analysis</span>
             <span class="pill">Predictive Modeling</span>
-            <span class="pill">Statistical Analysis</span>
-            <span class="pill">Housing Analytics</span>
+            <span class="pill">Business Insight</span>
+            <span class="pill">Statistical Learning</span>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Why This Matters</h2>
+          <h2>Why It Matters</h2>
           <p>
-            Housing is one of the most important financial decisions in Singapore. Understanding how resale prices respond to location, size, and property features helps evaluate market behavior, support better decisions, and translate analytics into real-world impact.
+            Housing is one of the most critical financial decisions in Singapore. Understanding the drivers of resale prices provides insight into market behavior, supports decision-making, and shows how data science can be used to extract value from real-world datasets.
           </p>
         </div>
       </section>
 
-      <section class="grid" style="margin-top:24px;">
+      <section class="content-grid" style="margin-top: 24px;">
         <div class="panel">
           <h2>Methodology</h2>
           <div class="method-grid">
             <div class="method-box">
               <strong>Exploratory Analysis</strong>
-              <span>Reviewed distributions, summary statistics, and relationships between resale prices and housing attributes.</span>
+              <span>Reviewed distributions, summary statistics, and relationships between housing attributes and pricing.</span>
             </div>
             <div class="method-box">
               <strong>Unsupervised Learning</strong>
-              <span>K-means clustering, PCA, and hierarchical clustering were used to discover structure in the data.</span>
+              <span>Used PCA and clustering techniques to uncover data structure and segment market patterns.</span>
             </div>
             <div class="method-box">
               <strong>Regression Modeling</strong>
-              <span>Multiple linear regression, polynomial regression, and KNN regression were used for price prediction.</span>
+              <span>Compared linear regression, polynomial regression, and KNN regression for price prediction.</span>
             </div>
             <div class="method-box">
-              <strong>Classification Models</strong>
-              <span>Logistic regression and decision tree models were used to classify whether a unit is above the median price threshold.</span>
+              <strong>Classification</strong>
+              <span>Applied logistic regression and decision trees to predict whether a flat sits above the median price threshold.</span>
             </div>
           </div>
         </div>
 
-        <div class="panel">
-          <h2>Key Findings</h2>
-          <ul class="insights">
-            <li><span class="bullet">✓</span><span>Resale price is strongly associated with property size, distance to the CBD, and remaining lease duration.</span></li>
-            <li><span class="bullet">✓</span><span>Feature-rich regression models achieved strong explanatory power, with an adjusted R² of 0.9266.</span></li>
-            <li><span class="bullet">✓</span><span>Logistic regression produced a high classification performance with AUC = 0.94, highlighting practical predictive signal.</span></li>
-            <li><span class="bullet">✓</span><span>Model comparison showed that no single method is sufficient; different algorithms provide complementary insights.</span></li>
+        <div class="panel" id="results">
+          <h2>Key Takeaways</h2>
+          <ul class="bullet-list">
+            <li><span class="bullet-icon">✓</span><span>Property size, distance to the CBD, and remaining lease duration had strong relationships with price.</span></li>
+            <li><span class="bullet-icon">✓</span><span>Strong model performance suggests the project is not just descriptive, but genuinely predictive.</span></li>
+            <li><span class="bullet-icon">✓</span><span>The project highlights practical data science skills: feature engineering, validation, and model interpretation.</span></li>
           </ul>
         </div>
       </section>
 
-      <section class="panel" style="margin-top:24px;">
+      <section class="panel" style="margin-top: 24px;">
         <h2>Model Performance Summary</h2>
         <table>
           <thead>
@@ -370,13 +553,13 @@
             </tr>
             <tr>
               <td>Logistic Regression</td>
-              <td>Above-median price classification</td>
+              <td>Above-median classification</td>
               <td>AUC = 0.94</td>
             </tr>
             <tr>
               <td>KNN Regression</td>
-              <td>Nonlinear price estimation</td>
-              <td>Strong predictive performance with low MSE</td>
+              <td>Non-linear price estimation</td>
+              <td>Strong performance with low MSE</td>
             </tr>
             <tr>
               <td>Decision Tree</td>
@@ -387,33 +570,37 @@
         </table>
       </section>
 
-      <section class="grid" style="margin-top:24px;">
+      <section class="content-grid" style="margin-top: 24px;">
         <div class="panel">
-          <h2>Technical Stack</h2>
-          <div class="pill-row">
-            <span class="pill">R</span>
-            <span class="pill">readxl</span>
-            <span class="pill">dplyr</span>
-            <span class="pill">ks</span>
-            <span class="pill">pls</span>
-            <span class="pill">ROCR</span>
-            <span class="pill">kknn</span>
-            <span class="pill">tree</span>
-            <span class="pill">rpart</span>
-            <span class="pill">corrplot</span>
+          <h2>Technical Skills Demonstrated</h2>
+          <div class="tech-stack">
+            <span class="tech-item">R</span>
+            <span class="tech-item">dplyr</span>
+            <span class="tech-item">readxl</span>
+            <span class="tech-item">corrplot</span>
+            <span class="tech-item">ks</span>
+            <span class="tech-item">pls</span>
+            <span class="tech-item">ROCR</span>
+            <span class="tech-item">kknn</span>
+            <span class="tech-item">tree</span>
+            <span class="tech-item">rpart</span>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Interview / Recruiter Talking Points</h2>
+          <h2>Recruiter Lens</h2>
           <p>
-            This project demonstrates end-to-end statistical analysis and machine learning skills, including business framing, feature analysis, model selection, and performance interpretation. It highlights the ability to transform raw data into business insight and communicate complex results clearly to non-technical stakeholders.
+            This project demonstrates a complete data science workflow: understanding a business problem, exploring data, building and benchmarking models, validating performance, and communicating findings clearly. It reflects the type of analytical thinking and practical execution expected in data science and analytics roles.
           </p>
         </div>
       </section>
 
-      <div class="footer-note">
-        Repository highlights: predictive modeling, model validation, interpretability, and real estate analytics in a Singapore context.
+      <div class="cta-band">
+        <div>
+          <h3>Interested in the full project?</h3>
+          <p>Explore the repository and review the complete analysis, code, and modeling workflow.</p>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/jmspro123/2021HDBproject" target="_blank" rel="noreferrer">Open Repository</a>
       </div>
     </div>
   </body>
