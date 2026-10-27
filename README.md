@@ -1,7 +1,40 @@
 # 2021HDBproject
 
-The property market in Singapore is a hot topic in conversations across ages and occupations, especially so for the public housing sector, also known as HDB. Living in a HDB flat myself, this data set particularly interested me and is the most relatable. Through this data set, I seek to understand factors that may be important for pricing HDB flats on the secondary market. I hope to be able to come up with a suitable pricing model to predict prices in the resale market.
+An end-to-end data science project analysing and forecasting Singapore HDB resale prices using machine learning and statistical modeling.
 
-As data cleaning had already been done, I will not be doing further cleaning such as removing outliers and there were no missing values in the data set. The outcome variable in this data set would be the HDB resale price and as the HDB prices are in large numbers, I have normalized them by dividing them by 1000 to have more manageable numbers to deal with for my reports.  As this is very large data set of 6000 variables, I have also split the data set into a training set of 4500 observations and testing set of 1500 observations with a seeding number of 567834.
+## Project summary
+This project explores how property characteristics such as floor area, remaining lease, distance to CBD, and nearby amenities influence HDB resale pricing. The goal is to quantify which factors matter most and build predictive models that can estimate resale values and classify whether an HDB unit is above or below the median market price.
 
-In this report, I will firstly be doing unsupervised learning to infer some structure within the dataset through Kernel Density Estimation, K-means Clustering, Hierarchal Clustering and Principal Component Analysis (PCA). Next, I did some descriptive analysis on variables that I felt were potential predictors before attempting to build a predictive model. For my supervised learning algorithm, I considered modeling methods such as linear regression, logit model, K-nearest Neighbors (KNN) regression and the Decision Tree model. Lastly, I picked the model with the best performance and looked up a couple of current listing for HDB’s and predicted their price using my best model. I will not be engaging in any logit or binomial model as I do not find it very useful for my model but research has been done in my R report.
+## Why this project matters
+Housing is one of the most important financial decisions for households in Singapore. By modelling resale prices, this project demonstrates how data science can turn large property datasets into actionable insights for buyers, sellers, and analysts.
+
+## Core workflow
+- Exploratory data analysis and feature understanding
+- Unsupervised learning using clustering and PCA
+- Regression modeling for price prediction
+- Logistic regression and decision tree classification for high-price classification
+- Model comparison using performance metrics and validation approaches
+
+## Key results
+- Full linear regression model achieved strong explanatory power with adjusted R-squared of 0.9266
+- Feature importance analysis highlighted floor area, remaining lease, distance to CBD, and nearby amenities as major drivers
+- Logistic regression achieved AUC = 0.94 for identifying high-value HDB flats
+- Multiple analytical methods were compared to assess predictive performance and business relevance
+
+## Technical stack
+- R
+- readxl, dplyr
+- ks, corrplot
+- pls, kknn, ROCR
+- tree, rpart, rpart.plot
+
+## Files
+- `HDB_Data_Project.R` — complete project analysis in R
+- `README.md` — project overview
+- `dashboard.html` — recruiter-friendly visual summary
+
+## Recruiter-ready dashboard
+Open the dashboard here: `dashboard.html`
+
+## Learnings
+This work shows a practical data science workflow: cleaning and understanding data, building interpretable models, validating results, and communicating insights clearly. The project is well-suited for discussing statistical analysis, predictive modeling, and business interpretation in interviews.
